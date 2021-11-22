@@ -1,0 +1,7 @@
+{
+    "eslint.validate": ["javascript"],
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true,
+    },
+}
