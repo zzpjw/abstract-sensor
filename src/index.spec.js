@@ -1,6 +1,10 @@
 const { Sensor, IotServer } = require('./index');
 
 describe('Sensor 요구사항 테스트', () => {
+    beforeEach(() => {
+        jest.useFakeTimers();
+    });
+
     afterEach(() => {
         jest.clearAllTimers();
     });
@@ -51,8 +55,6 @@ describe('Sensor 요구사항 테스트', () => {
     });
 
     test('유휴 상태에서 설정된 reportingInterval 값(단위: ms) 만큼 기다린 후 거리 측정을 한다.', () => {
-        jest.useFakeTimers();
-
         const sensor = new Sensor('id1');
         sensor.turn('on');
 
@@ -63,8 +65,6 @@ describe('Sensor 요구사항 테스트', () => {
     });
 
     test('거리 측정에 걸리는 시간은 항상 500ms 이내여야 한다.', () => {
-        jest.useFakeTimers();
-
         const sensor = new Sensor('id1');
         sensor.turn('on');
         jest.advanceTimersByTime(sensor.reportingInterval); // 유휴 대기 시간
@@ -75,8 +75,6 @@ describe('Sensor 요구사항 테스트', () => {
     });
 
     test('데이터 보고에 걸리는 시간은 항상 1000ms 이내여야 하며, 데이터 보고 후 유휴 상태로 돌아간다.', () => {
-        jest.useFakeTimers();
-
         const sensor = new Sensor('id1');
 
         sensor.turn('on');
@@ -97,7 +95,7 @@ describe('Sensor 요구사항 테스트', () => {
         sensor.turn('on');
 
         const server = new IotServer();
-        server.start();
+        server.start([sensor]);
 
         server.publish({
             deviceId: 'id1',
@@ -114,7 +112,7 @@ describe('Sensor 요구사항 테스트', () => {
         // DO NOT turn on
 
         const server = new IotServer();
-        server.start();
+        server.start([sensor]);
 
         server.publish({
             deviceId: 'id1',
