@@ -22,7 +22,7 @@ describe('Sensor 요구사항 테스트', () => {
 
         expect(() => {
             sensor.turn('on');
-        }).toThrow('기기가 이미 켜져 있습니다.');
+        }).toThrow(Error);
     });
 
     test('기기가 켜지는 즉시 유휴 상태로 들어간다.', () => {
@@ -86,12 +86,7 @@ describe('Sensor 요구사항 테스트', () => {
         jest.advanceTimersByTime(500); // 거리 측정에 걸리는 시간
         expect(sensor.status).toEqual('reportingData');
 
-        // sensor.report(~~) 가 실행됐는지 확인한다.
-        const mockedReportFn = jest.spyOn(sensor, 'report');
-        expect(mockedReportFn).toHaveBeenCalledTimes(1);
-
         jest.advanceTimersByTime(1000); // 데이터 보고에 걸리는 시간
-
         expect(sensor.status).toEqual('idle');
     });
 
